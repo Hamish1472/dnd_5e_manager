@@ -190,25 +190,6 @@ WEAPONS = {
             "versatile_dmg": "1d8",
         },
     },
-    "Unarmed strike": {
-        "simple": True,
-        "ranged": False,
-        "dmg": "1d1",
-        "dmg_type": "b",
-        "properties": {
-            "ammunition": None,
-            "finesse": False,
-            "heavy": False,
-            "light": False,
-            "loading": False,
-            "range": None,
-            "reach": False,
-            "special": False,
-            "thrown": False,
-            "two-handed": False,
-            "versatile_dmg": None,
-        },
-    },
     # Simple Ranged Weapons
     "Light Crossbow": {
         "simple": True,

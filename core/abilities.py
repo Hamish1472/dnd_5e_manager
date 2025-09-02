@@ -1,5 +1,6 @@
 from InquirerPy import inquirer
-from .dice import roll_ability
+from utils.dice import roll_ability
+from data.races import RACES
 
 
 class Abilities:
@@ -15,12 +16,10 @@ class Abilities:
 
     @staticmethod
     def modifier(score):
-        """Return the D&D ability modifier for a given score."""
         return (score - 10) // 2
 
     @classmethod
     def roll(cls):
-        """Roll and assign ability scores interactively."""
         scores = [roll_ability() for _ in range(6)]
         scores.sort(reverse=True)
         print(f"\nRolled scores (descending): {scores}")
@@ -50,13 +49,11 @@ class Abilities:
             assigned["Charisma"],
         )
 
-    def apply_racial_bonuses(self, race, races_data):
-        """Apply racial bonuses to abilities from data dict."""
-        bonuses = races_data[race].get("bonuses", {})
+    def apply_racial_bonuses(self, race):
+        bonuses = RACES[race].get("bonuses", {})
 
         for ability, bonus in bonuses.items():
             if ability == "Other":
-                # Restrict flexible bonuses to abilities without fixed bonuses
                 fixed_bonuses = {ab for ab in bonuses if ab != "Other"}
                 available = [
                     "Strength",
@@ -84,7 +81,55 @@ class Abilities:
         if bonuses:
             print(f"\nApplied racial bonuses for {race}: {bonuses}")
 
-    def as_dict(self):
+    def _ability_choices(self, exclude=None):
+        exclude = exclude or []
+        abilities = [
+            "Strength",
+            "Dexterity",
+            "Constitution",
+            "Intelligence",
+            "Wisdom",
+            "Charisma",
+        ]
+        return [
+            f"{ab} ({getattr(self, ab.lower())})"
+            for ab in abilities
+            if ab not in exclude
+        ]
+
+    def _parse_choice(self, choice):
+        return choice.split()[0]
+
+    def apply_asi(self, combat_stats, equipment):
+        option = inquirer.select(
+            message="Ability Score Improvement: choose type",
+            choices=["Increase two abilities by +1", "Increase one ability by +2"],
+        ).execute()
+
+        if option == "Increase two abilities by +1":
+            chosen = []
+            for i in range(2):
+                choice = inquirer.select(
+                    message=f"Select ability #{i+1} to increase by +1:",
+                    choices=self._ability_choices(exclude=chosen),
+                ).execute()
+                ability = self._parse_choice(choice)
+                current = getattr(self, ability.lower())
+                setattr(self, ability.lower(), min(current + 1, 20))
+                chosen.append(ability)
+        else:
+            choice = inquirer.select(
+                message="Select ability to increase by +2:",
+                choices=self._ability_choices(),
+            ).execute()
+            ability = self._parse_choice(choice)
+            current = getattr(self, ability.lower())
+            setattr(self, ability.lower(), min(current + 2, 20))
+
+        combat_stats.recalculate_hp()
+        combat_stats.calculate_ac(equipment)
+
+    def to_dict(self):
         return {
             "Strength": self.strength,
             "Dexterity": self.dexterity,
@@ -93,3 +138,14 @@ class Abilities:
             "Wisdom": self.wisdom,
             "Charisma": self.charisma,
         }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            data["Strength"],
+            data["Dexterity"],
+            data["Constitution"],
+            data["Intelligence"],
+            data["Wisdom"],
+            data["Charisma"],
+        )

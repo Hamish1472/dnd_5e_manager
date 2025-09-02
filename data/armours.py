@@ -103,5 +103,5 @@ ARMOURS = {
         "type": "base",
         "class": "heavy",
     },
-    "Shield": {"type": "bonus", "bonus": 2, "class": "other"},
+    "Shield": {"type": "bonus", "bonus": 2, "class": "shield"},
 }

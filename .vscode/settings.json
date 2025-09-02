@@ -19,5 +19,6 @@
         "titleBar.inactiveForeground": "#e7e7e799"
     },
     "peacock.color": "#832561",
-    "draw.folder.structure.style": "ClassicDashes"
+    "draw.folder.structure.style": "ClassicDashes",
+    "folder-structure.copyStructure.indentation": 4
 }
