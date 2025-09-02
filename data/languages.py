@@ -1,0 +1,18 @@
+LANGUAGES = {
+    "Common": {"exotic": False, "script": "Common"},
+    "Dwarvish": {"exotic": False, "script": "Dwarvish"},
+    "Elvish": {"exotic": False, "script": "Elvish"},
+    "Giant": {"exotic": False, "script": "Dwarvish"},
+    "Gnomish": {"exotic": False, "script": "Dwarvish"},
+    "Goblin": {"exotic": False, "script": "Dwarvish"},
+    "Halfling": {"exotic": False, "script": "Common"},
+    "Orc": {"exotic": False, "script": "Dwarvish"},
+    "Abyssal": {"exotic": True, "script": "Infernal"},
+    "Celestial": {"exotic": True, "script": "Celestial"},
+    "Draconic": {"exotic": True, "script": "Draconic"},
+    "Deep Speech": {"exotic": True, "script": None},
+    "Infernal": {"exotic": True, "script": "Infernal"},
+    "Primordial": {"exotic": True, "script": "Dwarvish"},
+    "Sylvan": {"exotic": True, "script": "Elvish"},
+    "Undercommon": {"exotic": True, "script": "Elvish"},
+}
